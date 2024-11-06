@@ -16,9 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import pacientlist
+from .views.pacient_views import pacientlist
+from .views.doctor_views import doctorlist
+from .views.queue_views import queuelist
+from .views.reception_views import receptionlist
+from .views.service_views import servicelist
 
-#/pacients/
+
 urlpatterns = [
-    path('', pacientlist, name="list-pacients"),
+    path('pacients/', pacientlist, name="list-pacients"),
+    path('doctors/', doctorlist, name="list-doctors"),
+    path('queues/', queuelist, name="list-queues"),
+    path('receptions/', receptionlist, name="list-receptions"),
+    path('services/', servicelist, name="listservice")
 ]

@@ -17,8 +17,6 @@ class Base(models.Model):
         # Isso significa que não será criada uma tabela correspondente para a classe Base no banco de dados,
         # mas suas propriedades poderão ser herdadas por outras classes que a utilizam.
 
-########################################################################################################
-
 class Pacient(Base):
     name = models.CharField("Nome", max_length=255, null=False, blank=False)
     cpf = models.CharField("CPF", max_length=11, unique=True, null=False, blank=False)
@@ -28,8 +26,6 @@ class Pacient(Base):
     def __str__(self):
         return self.name
     
-########################################################################################################
-
 class Doctor(Base):
     name = models.CharField("Nome", max_length=255, null=False, blank=False)
     specialty = models.CharField("Especialidade", max_length=255, null=False, blank=False)
@@ -37,9 +33,7 @@ class Doctor(Base):
     def __str__(self):
         return self.name
 
-########################################################################################################
-
-class Queue(models.Model):
+class Queue(Base):
     pacient = models.ForeignKey(Pacient, on_delete=models.CASCADE, related_name="queues")
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name="queues")
     ticket = models.CharField("Senha", max_length=10, unique=True)
@@ -49,20 +43,16 @@ class Queue(models.Model):
     def __str__(self):
         return f'Senha: {self.ticket} - Paciente: {self.pacient.name} - Médico: {self.doctor.name}'
     
-########################################################################################################
-
-class Screening(Base):
-    pacient = models.ForeignKey(Pacient, on_delete=models.CASCADE, related_name="screenings")
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name="screenings")
-    data_screening = models.DateTimeField("Data de Triagem", auto_now_add=True)
+class Reception(Base):
+    pacient = models.ForeignKey(Pacient, on_delete=models.CASCADE, related_name="Receptions")
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name="Receptions")
+    data_reception = models.DateTimeField("Data de Triagem", auto_now_add=True)
     description = models.TextField("Observações", null=True, blank=True)
 
     def __str__(self):
-        return f'Triagem de {self.pacient.name} por {self.doctor.name} em {self.data_screening}'
+        return f'Triagem de {self.pacient.name} por {self.doctor.name} em {self.data_reception}'
     
-########################################################################################################
-
-class Service(models.Model):
+class Service(Base):
     pacient = models.ForeignKey(Pacient, on_delete=models.CASCADE, related_name="services")
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name="services")
     date_time_start = models.DateTimeField("Data e Hora de Início")  # Agora é editável
