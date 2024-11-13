@@ -23,10 +23,11 @@ from .views.reception_views import receptionlist
 from .views.service_views import servicelist
 
 
+
 urlpatterns = [
     path('pacients/', pacientlist, name="list-pacients"),
     path('doctors/', doctorlist, name="list-doctors"),
     path('queues/', queuelist, name="list-queues"),
     path('receptions/', receptionlist, name="list-receptions"),
-    path('services/', servicelist, name="listservice")
+    path('services/', servicelist, name="listservice"),
 ]

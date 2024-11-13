@@ -1,0 +1,109 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Cor de fundo desfocado */
+    z-index: 1000; /* Garante que o modal esteja na frente de tudo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.conteiner {
+    width: 90%;
+    height: 80%;
+    gap: 70px;
+    border-radius: 16px;
+    opacity: 0px;
+    background: white;
+}
+
+.conteiner2 {
+    height: 95%;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cima {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 93%;
+}
+
+.cima h3 {
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: left;
+}
+
+.baixo {
+    width: 100%;
+    height: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.conteiner3 {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.conteiner3 button {
+    border: solid 1.24px rgb(0, 0, 0);
+}
+
+.meioImfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.legenda {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    height: 10%;
+    margin-bottom: auto;
+}
+
+.corpo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 40vh;
+    overflow: hidden;
+    overflow-y: auto;
+    margin-bottom: auto;
+}
+
+
+.meio {
+    width: 100%;
+    height: 100%;
+}
+
+.baixo input{
+    color: black;
+    
+}
+
+@media (max-height: 555px) {
+    .corpo {
+        height: 20vh;
+    }
+}
