@@ -1,33 +1,22 @@
-"""
-URL configuration for backend project.
+from rest_framework.routers import DefaultRouter
+from django.urls import path, include
+from .views.pacient_views import PacientViewSet
+from .views.doctor_views import DoctorViewSet
+from .views.queue_views import QueueViewSet
+from .views.reception_views import ReceptionViewSet
+from .views.service_views import ServiceViewSet
+from .views.nurse_views import NurseViewSet
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
-from django.urls import path
-from .views.pacient_views import pacientlist
-from .views.doctor_views import doctorlist
-from .views.queue_views import queuelist
-from .views.reception_views import receptionlist
-from .views.service_views import servicelist
+# Cria um roteador para rotas padrão
+router = DefaultRouter()
+router.register(r'pacients', PacientViewSet, basename='pacient')
+router.register(r'doctors', DoctorViewSet, basename='doctor')
+router.register(r'queues', QueueViewSet, basename='queue')
+router.register(r'receptions', ReceptionViewSet, basename='reception')
+router.register(r'services', ServiceViewSet, basename='service')
+router.register(r'nurses', NurseViewSet, basename='nurse')
 
-
-
+# Inclui as rotas do roteador
 urlpatterns = [
-    path('pacients/', pacientlist, name="list-pacients"),
-    path('doctors/', doctorlist, name="list-doctors"),
-    path('queues/', queuelist, name="list-queues"),
-    path('receptions/', receptionlist, name="list-receptions"),
-    path('services/', servicelist, name="listservice"),
+    path('', include(router.urls)),
 ]

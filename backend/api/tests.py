@@ -3,8 +3,9 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.urls import reverse
-from .models import Pacient, Doctor, Queue, Reception, Service
+from .models import Pacient, Doctor, Queue, Reception, Service, Nurse
 from datetime import date
+from django.utils import timezone
 
 # Configuração do logger para exibir mensagens no console
 logging.basicConfig(level=logging.INFO)
@@ -16,34 +17,40 @@ class ApiRoutesTests(TestCase):
         self.client = APIClient()
 
     def test_list_pacients_route(self):
-        url = reverse('list-pacients')
+        url = reverse('pacient-list')  # Atualizado para usar o nome correto da rota
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        logger.info("Teste de rota 'list-pacients' concluído com sucesso.")
+        logger.info("Teste de rota 'pacients' concluído com sucesso.")
 
     def test_list_doctors_route(self):
-        url = reverse('list-doctors')
+        url = reverse('doctor-list')  # Atualizado para usar o nome correto da rota
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        logger.info("Teste de rota 'list-doctors' concluído com sucesso.")
+        logger.info("Teste de rota 'doctors' concluído com sucesso.")
 
     def test_list_queues_route(self):
-        url = reverse('list-queues')
+        url = reverse('queue-list')  # Atualizado para usar o nome correto da rota
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        logger.info("Teste de rota 'list-queues' concluído com sucesso.")
+        logger.info("Teste de rota 'queues' concluído com sucesso.")
 
     def test_list_receptions_route(self):
-        url = reverse('list-receptions')
+        url = reverse('reception-list')  # Atualizado para usar o nome correto da rota
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        logger.info("Teste de rota 'list-receptions' concluído com sucesso.")
+        logger.info("Teste de rota 'receptions' concluído com sucesso.")
 
     def test_list_services_route(self):
-        url = reverse('listservice')
+        url = reverse('service-list')  # Atualizado para usar o nome correto da rota
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        logger.info("Teste de rota 'listservice' concluído com sucesso.")
+        logger.info("Teste de rota 'services' concluído com sucesso.")
+
+    def test_list_nurses_route(self):
+        url = reverse('nurse-list')  # Teste para a rota de enfermeiros
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        logger.info("Teste de rota 'nurses' concluído com sucesso.")
 
 # Testes dos Modelos e Banco de Dados
 class ModelTests(TestCase):
@@ -58,6 +65,11 @@ class ModelTests(TestCase):
             name="Dra. Maria",
             specialty="Cardiologia"
         )
+        
+        self.nurse = Nurse.objects.create(
+            name="Enfermeira Ana",
+            registration_number="ENF123"
+        )
 
     def test_create_pacient(self):
         pacient = Pacient.objects.get(cpf="12345678901")
@@ -70,39 +82,59 @@ class ModelTests(TestCase):
         self.assertEqual(doctor.specialty, "Cardiologia")
         logger.info("Teste de criação de 'Doctor' concluído com sucesso.")
 
+    def test_create_nurse(self):
+        nurse = Nurse.objects.get(registration_number="ENF123")
+        self.assertEqual(nurse.name, "Enfermeira Ana")
+        self.assertEqual(nurse.registration_number, "ENF123")
+        logger.info("Teste de criação de 'Nurse' concluído com sucesso.")
+
     def test_create_queue(self):
         queue = Queue.objects.create(
             pacient=self.pacient,
             doctor=self.doctor,
             ticket="A001",
-            prioridade=1
+            priority=1,
+            status='triagem',
+            triage_nurse=self.nurse
         )
         self.assertEqual(queue.pacient.name, "João da Silva")
         self.assertEqual(queue.doctor.name, "Dra. Maria")
         self.assertEqual(queue.ticket, "A001")
-        self.assertEqual(queue.prioridade, 1)
+        self.assertEqual(queue.priority, 1)
+        self.assertEqual(queue.status, 'triagem')
+        self.assertEqual(queue.triage_nurse.name, "Enfermeira Ana")
         logger.info("Teste de criação de 'Queue' concluído com sucesso.")
 
     def test_create_reception(self):
         reception = Reception.objects.create(
             pacient=self.pacient,
-            doctor=self.doctor,
+            nurse=self.nurse,
             description="Paciente com sintomas leves"
         )
         self.assertEqual(reception.pacient.name, "João da Silva")
-        self.assertEqual(reception.doctor.name, "Dra. Maria")
+        self.assertEqual(reception.nurse.name, "Enfermeira Ana")
         self.assertEqual(reception.description, "Paciente com sintomas leves")
         logger.info("Teste de criação de 'Reception' concluído com sucesso.")
 
     def test_create_service(self):
-        service = Service.objects.create(
-            pacient=self.pacient,
-            doctor=self.doctor,
-            date_time_start="2024-11-13 10:00",
-            descriptions="Consulta inicial"
+        # Criando paciente e médico com todos os campos obrigatórios
+        pacient_instance = Pacient.objects.create(
+            name="Paciente Teste",
+            birth_date=timezone.now()  # Agora fornecemos uma data para o campo 'birth_date'
         )
-        self.assertEqual(service.pacient.name, "João da Silva")
-        self.assertEqual(service.doctor.name, "Dra. Maria")
-        self.assertEqual(service.date_time_start.strftime("%Y-%m-%d %H:%M"), "2024-11-13 10:00")
-        self.assertEqual(service.descriptions, "Consulta inicial")
-        logger.info("Teste de criação de 'Service' concluído com sucesso.")
+        doctor_instance = Doctor.objects.create(name="Médico Teste")
+        
+        # Criando a instância de Service
+        service = Service.objects.create(
+            pacient=pacient_instance,
+            doctor=doctor_instance,
+            start_time=timezone.now(),
+            final_status='alta',  # ou outro valor válido de 'final_status'
+            observations="Test Service"
+        )
+        
+        # Verificando se o objeto foi criado corretamente
+        self.assertEqual(service.pacient.name, "Paciente Teste")
+        self.assertEqual(service.doctor.name, "Médico Teste")
+        self.assertEqual(service.final_status, 'alta')
+        self.assertEqual(service.observations, "Test Service")
