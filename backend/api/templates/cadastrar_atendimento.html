@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Atendimento</title>
+    <link rel="stylesheet" href="{% static 'api/css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastrar Atendimento</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Cadastrar</button>
+            <a type="btn-atualizar-dashboard" href="http://127.0.0.1:8000/api/dashboard/">Dashboard</a>
+        </form>
+    </div>
+</body>
+</html>
+

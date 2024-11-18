@@ -58,7 +58,9 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'backend/api/templates',  # Caminho para os templates
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,9 +121,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-
+# Adicione ou verifique estas configurações
+# Diretório global para arquivos estáticos
+STATIC_URL = '/static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
+# Diretórios adicionais, se necessário
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # Para arquivos estáticos globais
+]
+
+# Diretório de coleta de arquivos estáticos durante produção (opcional)
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',  # Adicione o URL do seu servidor de desenvolvimento
+]
