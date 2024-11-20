@@ -6,12 +6,32 @@
     <title>Dashboard</title>
     {% load static %}
     <script src="{% static 'api/js/dashboard.js' %}" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Estilização básica */
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
             background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px;
+            color: white;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+        .navbar input[type="text"] {
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            width: 250px;
         }
         .buttons {
             margin-bottom: 20px;
@@ -29,11 +49,25 @@
         button:hover {
             background-color: #0056b3;
         }
+        .queue-sections {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
         .queue-section {
-            margin-bottom: 30px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-bottom: 20px;
+            flex: 1 1 300px;
         }
         .queue-section h2 {
             color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .queue-section ul {
             list-style: none;
@@ -45,6 +79,9 @@
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
+        }
+        .queue-section li strong {
+            color: #0056b3;
         }
         .modal {
             display: none;
@@ -93,69 +130,73 @@
     </style>
 </head>
 <body>
+    <!-- Título da Página -->
+    <h1>Dashboard Administrativo</h1>
+
+    <!-- Navbar com Campo de Pesquisa -->
+    <div class="navbar">
+        <div>
+            <a href="{% url 'cadastrar_paciente' %}"><i class="fas fa-user-plus"></i> Cadastrar Paciente</a>
+            <a href="{% url 'cadastrar_medico' %}"><i class="fas fa-user-md"></i> Cadastrar Médico</a>
+            <a href="{% url 'cadastrar_enfermeiro' %}"><i class="fas fa-user-nurse"></i> Cadastrar Enfermeiro</a>
+            <a href="{% url 'cadastrar_atendimento' %}"><i class="fas fa-stethoscope"></i> Cadastrar Atendimento</a>
+        </div>
+        <input type="text" placeholder="Pesquisar..." id="search-bar">
+    </div>
+
     <!-- Botões de Cadastro -->
     <div class="buttons">
-        <a href="{% url 'cadastrar_paciente' %}">
-            <button id="btn-cadastrar-paciente" type="button">Cadastrar Paciente</button>
-        </a>
-        <a href="{% url 'cadastrar_medico' %}">
-            <button id="btn-cadastrar-medico" type="button">Cadastrar Médico</button>
-        </a>
-        <a href="{% url 'cadastrar_enfermeiro' %}">
-            <button id="btn-cadastrar-enfermeiro" type="button">Cadastrar Enfermeiro</button>
-        </a>
-        <a href="{% url 'cadastrar_atendimento' %}">
-            <button id="btn-cadastrar-atendimento" type="button">Cadastrar Atendimento</button>
-        </a>
         <button id="btn-atualizar-dashboard" type="button">
-            <a id="abtn-atualizar-dashboard" href="http://127.0.0.1:8000/api/dashboard/">Atualizar Dashboard</a>
+            <a id="abtn-atualizar-dashboard" href="http://127.0.0.1:8000/api/dashboard/"><i class="fas fa-sync-alt"></i> Atualizar Dashboard</a>
         </button>
     </div>
 
-    <!-- Fila de Senhas em Atendimento -->
-    <div class="queue-section">
-        <h2>Senhas em Atendimento</h2>
-        <ul>
-            {% for queue in fila_em_atendimento %}
-                <li>
-                    <strong>Senha:</strong> {{ queue.ticket }} - 
-                    <strong>Paciente:</strong> {{ queue.pacient.name }} - 
-                    <strong>Médico:</strong> {{ queue.doctor.name }} - 
-                    <strong>Status:</strong> {{ queue.get_status_display }}
-                </li>
-            {% endfor %}
-        </ul>
-        {% if fila_em_atendimento|length == 0 %}
-            <p>Não há senhas em atendimento no momento.</p>
-        {% endif %}
-    </div>
+    <!-- Fila de Triagem, Atendimento e Pós-Atendimento -->
+    <div class="queue-sections">
+        <!-- Fila de Triagem -->
+        <div class="queue-section">
+            <h2><i class="fas fa-procedures"></i> Fila de Triagem</h2>
+            <ul>
+                {% for queue in fila_triagem %}
+                    <li>
+                        <strong>Senha:</strong> {{ queue.senha }} - 
+                        <strong>Paciente:</strong> {{ queue.pacient.name }} - 
+                        <strong>Status:</strong> {{ queue.get_status_display }} - 
+                        <strong>Data de Criação:</strong> {{ queue.date_created|date:"M d, Y, h:i a" }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    <!-- Fila de Triagem -->
-    <div class="queue-section">
-        <h2>Fila de Triagem</h2>
-        <ul>
-            {% for queue in fila_triagem %}
-                <li>
-                    <strong>Senha:</strong> {{ queue.ticket }} - 
-                    <strong>Paciente:</strong> {{ queue.pacient.name }} - 
-                    <strong>Status:</strong> {{ queue.get_status_display }}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+        <!-- Fila de Atendimento -->
+        <div class="queue-section">
+            <h2><i class="fas fa-hospital"></i> Fila de Atendimento</h2>
+            <ul>
+                {% for queue in fila_atendimento %}
+                    <li>
+                        <strong>Senha:</strong> {{ queue.senha }} - 
+                        <strong>Paciente:</strong> {{ queue.pacient.name }} - 
+                        <strong>Status:</strong> {{ queue.get_status_display }} - 
+                        <strong>Data de Criação:</strong> {{ queue.date_created|date:"M d, Y, h:i a" }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    <!-- Fila de Pós-Atendimento -->
-    <div class="queue-section">
-        <h2>Fila de Pós-Atendimento</h2>
-        <ul>
-            {% for queue in fila_pos_atendimento %}
-                <li>
-                    <strong>Senha:</strong> {{ queue.ticket }} - 
-                    <strong>Paciente:</strong> {{ queue.pacient.name }} - 
-                    <strong>Status:</strong> {{ queue.get_status_display }}
-                </li>
-            {% endfor %}
-        </ul>
+        <!-- Fila de Pós-Atendimento -->
+        <div class="queue-section">
+            <h2><i class="fas fa-bed"></i> Fila de Pós-Atendimento</h2>
+            <ul>
+                {% for queue in fila_pos_atendimento %}
+                    <li>
+                        <strong>Senha:</strong> {{ queue.senha }} - 
+                        <strong>Paciente:</strong> {{ queue.pacient.name }} - 
+                        <strong>Status:</strong> {{ queue.get_status_display }} - 
+                        <strong>Data de Criação:</strong> {{ queue.date_created|date:"M d, Y, h:i a" }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </body>
 </html>

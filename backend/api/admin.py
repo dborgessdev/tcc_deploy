@@ -1,10 +1,22 @@
 from django.contrib import admin
-from .models import *
-# Register your models here.
+from .models import Pacient, Consultation, Doctor, Queue, Reception, Nurse
 
+
+# Registrar os modelos no Django Admin
 admin.site.register(Pacient)
-admin.site.register(Consultation)
+
 admin.site.register(Doctor)
-admin.site.register(Queue)
-admin.site.register(Reception)
+
+@admin.register(Queue)
+class QueueAdmin(admin.ModelAdmin):
+    list_display = ('id', 'pacient', 'doctor', 'nurse', 'status', 'senha', 'priority', 'date_created')
+    readonly_fields = ('senha',)
+
 admin.site.register(Nurse)
+
+admin.site.register(Consultation)
+
+@admin.register(Reception)
+class ReceptionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'nurse']
+

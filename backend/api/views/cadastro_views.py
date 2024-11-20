@@ -4,7 +4,7 @@ from ..models import Pacient, Nurse, Doctor
 
 def cadastrar_paciente(request):
     if request.method == "POST":
-        form = PacientForm(request.POST)  # Usando o formulário correto para paciente
+        form = PacientForm(request.POST)
         if form.is_valid():
             form.save()
             return render(request, "cadastro_success.html")  # Página de sucesso
