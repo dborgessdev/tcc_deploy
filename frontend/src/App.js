@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './pages/Login/Login';
+import Login from './pages/login/login';
 import MenuPrincipal from './pages/MenuPrincipal/MenuPrincipal';
-import Cadastro from './pages/Cadastro/Cadastro'; //Lembre-se de importar a pagina de cadastro
+import Cadastro from './pages/cadastro/cadastro';
 
 function App() {
   return (

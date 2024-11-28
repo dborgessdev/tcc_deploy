@@ -1,22 +1,20 @@
-import style from './Cadastro.module.css';
+import MenuCadastro from '../../component/menuCadastro/menuCadastro';
+import Onda from '../../assets/img/Ondulação_Footer.png';
+import styles from './cadastro.module.css';
 
 function Cadastro() {
-    
-
-
-
-    return(
-        <div>
-            <h1>Cadastro</h1>
-            <p>Cadastre-se para poder utilizar o sistema</p>
-            <form>
-                <input type="text" placeholder="Nome" />
-                <input type="text" placeholder="Email" />
-                <input type="password" placeholder="Senha" />
-                <input type="password" placeholder="Confirme sua senha" />
-                <input type="submit" value="Cadastrar" />
-            </form>
-        </div>
+    return (
+        <main className={styles.cadastro}>
+            <div className={styles.subQuadradoCadastro}>
+                <MenuCadastro/>
+                <div className={styles.cabesalhoCadastro}>
+                    <h1>Cadastro de Administrador</h1>
+                </div>
+            </div>
+            <div className={styles.imagemBaixo}>
+                <img src={Onda} alt='Onda'/>
+            </div>
+        </main>
     );
 }
 

@@ -1,8 +1,5 @@
 .container {
-    background-image: url("../../assets/img/topography.svg");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-color: white;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -13,6 +10,7 @@
 }
 
 .navebar {
+    background-color: #E1E5F2;
     height: 10%;
     width: 100%;
     border-radius: 20px;
@@ -92,6 +90,10 @@
     width: 100%;
 }
 .detalhes {
+    background-image: url("../../assets/img/Seção\ Imagem.png");
+    background-size: cover;
+    background-position: top;
+    background-attachment: local;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -99,7 +101,6 @@
     width: 90%;
     font-size: 33px;
     margin: 10%;
-    backdrop-filter: blur(18px);
     border-radius: 10px;
     font-weight: bolder;
 }
