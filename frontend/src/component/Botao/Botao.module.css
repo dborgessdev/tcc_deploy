@@ -20,6 +20,16 @@
     color: #333;
 }
 
+.azulClaroButton {
+    background: #1F7A8C;
+    color: #FFFCFC;
+}
+
+.azulEscuroButton {
+    background: #022B3A;
+    color: #FFFCFC;
+}
+
 button {
     width: 133px;
     height: 39px;

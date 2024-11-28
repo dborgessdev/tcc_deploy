@@ -1,0 +1,51 @@
+.cadastro {
+    background-image: url(../../assets/img/Fundo.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100vh;
+    width: 100vw;
+}
+
+.subQuadradoCadastro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 90px;
+}
+
+.cabesalhoCadastro {
+    width: 680px;
+    height: 192px;
+    gap: 29.53px;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+}
+
+.imagemBaixo img {
+    width: 100vw;
+    display: flex;
+}
+
+.cabesalhoCadastro h1 {
+    font-family: Poppins;
+    font-size: 90px;
+    font-weight: 700;
+    line-height: 108px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+.cabesalhoCadastro h1::first-line {
+    font-family: Poppins;
+    font-size: 55px;
+    font-weight: 700;
+    line-height: 83px;
+    letter-spacing: 0em;
+    text-align: left;
+}

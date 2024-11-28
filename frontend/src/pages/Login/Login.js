@@ -1,41 +1,23 @@
-import style from "./Login.module.css";
-import Imput from "../../component/Imput/Imput";
-import Branco from "../../assets/img/Branco.svg";
-import olhoFechadoIcon from "../../assets/img/eye.png";
-import olhoAbertoIcon from "../../assets/img/show.png";
-import { useState } from "react";
-import Botao from "../../component/Botao/Botao";
-import { useNavigate } from "react-router-dom";
+import MenuLogin from '../../component/menuLogin/menuLogin';
+import styles from './login.module.css';
+import Onda from '../../assets/img/Ondulação_Footer.png';
 
 function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const navigate = useNavigate();
-
-    return(
-        <div className={style.container}>
-            <div className={style.conteiner2}>
-                <h1>Login</h1>
-                <Imput
-                    type="email"
-                    placeholder="Email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    imagen2={Branco}
-                />
-                <Imput
-                    type="password"
-                    placeholder="Senha"
-                    onChange={(e) => setPassword(e.target.value)}
-                    imagen2={olhoFechadoIcon}
-                    imagen3={olhoAbertoIcon}
-                />
-                <a href="#">Forgot password?</a>
-                <Botao children={"Login"} onClick={() => navigate("/menu")} color={'brancoButton'} />
-                <div className={style.register}>
-                    <p>Don't have an account? <a href="#">Register here!</a></p>
+    return (
+        <main className={styles.login}>
+            <div className={styles.subQuadradoLogin}>
+                <MenuLogin/>
+                <div className={styles.cabesalhoLogin}>
+                    <div className={styles.tituloLogin}>
+                        <h1>Página de Login</h1>
+                    </div>
+                    <h2>Painel de gerenciamento de senhas para clínica médica</h2>
                 </div>
             </div>
-        </div>
+            <div className={styles.imagemBaixo}>
+                <img src={Onda} alt='Onda'/>
+            </div>
+        </main>
     );
 }
 
