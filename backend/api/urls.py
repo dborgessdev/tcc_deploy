@@ -5,7 +5,9 @@ from .views.pacient_views import PacientViewSet
 from .views.doctor_views import DoctorViewSet
 from .views.queue_views import QueueViewSet
 from .views.reception_views import ReceptionViewSet
+from .views.reception_views import pre_triagem_view, iniciar_triagem_view, formulario_triagem_view
 from .views.consultation_views import ConsultationViewSet
+from .views.consultation_views import pre_consulta_view, iniciar_consulta_view, formulario_consulta_view
 from .views.nurse_views import NurseViewSet
 from .views.dashboard_views import dashboard_view
 from .views.cadastro_views import (
@@ -34,6 +36,16 @@ urlpatterns = [
     path('cadastrar-medico/', cadastrar_medico, name='cadastrar_medico'),
     path('cadastrar-enfermeiro/', cadastrar_enfermeiro, name='cadastrar_enfermeiro'),
     path('cadastrar-atendimento/', cadastrar_atendimento, name='cadastrar_atendimento'),
+
+    # Rotas Triagem
+    path('pre-triagem/', pre_triagem_view, name='pre_triagem'),
+    path('iniciar-triagem/', iniciar_triagem_view, name='iniciar_triagem'),
+    path('triagem/<str:senha>/', formulario_triagem_view, name='formulario_triagem'),
+
+    # Rotas consulta
+    path('pre-consulta/', pre_consulta_view, name='pre_consulta'),
+    path('iniciar-consulta/', iniciar_consulta_view, name='iniciar_consulta'),
+    path('consulta/<str:senha>/', formulario_consulta_view, name='formulario_consulta'),
 
     # Rota da dashboard
     path('dashboard/', dashboard_view, name='dashboard'),

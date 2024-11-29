@@ -118,24 +118,33 @@ class Consultation(Base):
         return f"Consulta de {self.pacient.name} com {self.doctor.name} em {self.date}"
     
 
-class Reception(Base):
-    """Modelo representando a recepção e o atendimento do paciente."""
-    pacient = models.ForeignKey(Pacient, on_delete=models.CASCADE)
-    nurse = models.ForeignKey(
-        'Nurse',  # Referência ao modelo Nurse
-        on_delete=models.SET_NULL,
-        null=True,  # Permitir valores nulos inicialmente
-        blank=True  # Permitir o campo vazio nos formulários
+class Reception(models.Model):
+    # Relacionamento com a fila de pacientes
+    queue = models.OneToOneField('Queue', on_delete=models.CASCADE, related_name='reception', default=None)
+
+    # Informações sobre a triagem
+    nurse = models.ForeignKey('Nurse', on_delete=models.SET_NULL, null=True, blank=True)
+    priority = models.CharField(
+        max_length=50,
+        choices=[('low', 'Baixa'), ('medium', 'Média'), ('high', 'Alta')],
+        default='low'  # Valor padrão definido para 'priority'
     )
-    reception_time = models.DateTimeField("Hora de Recepção", auto_now_add=True, null=True, blank=True)
+    main_complaint = models.TextField(default="Sem queixa")
+    disease_onset = models.CharField(max_length=255, default="Desconhecido")
+    physical_condition = models.CharField(max_length=255, default="Sem informação")
+    medications = models.TextField(blank=True, null=True)
+    allergies = models.CharField(max_length=255, blank=True, null=True)
+    addictions = models.TextField(blank=True, null=True)
+    blood_pressure = models.CharField(max_length=20, blank=True, null=True)
+    temperature = models.FloatField(blank=True, null=True)
+    oxygen_saturation = models.FloatField(blank=True, null=True)
+    heart_rate = models.IntegerField(blank=True, null=True)
+    pain_scale = models.IntegerField(blank=True, null=True)
+    glasgow_scale = models.IntegerField(blank=True, null=True)
+    triagem_finalizada = models.BooleanField(default=False)
     
-    STATUS_CHOICES = [
-        ('em_triagem', 'Em Triagem'),
-        ('disponivel_para_atendimento', 'Disponível para Atendimento Médico'),
-        ('em_atendimento', 'Em Atendimento'),
-        ('finalizado', 'Finalizado'),
-    ]
-    status = models.CharField("Status", max_length=30, choices=STATUS_CHOICES, default='em_triagem')
+    # Data e hora da triagem
+    data_triagem = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"Recepção de {self.pacient.name} - Status: {self.status}"
+        return f"Recepção {self.id} - Paciente: {self.queue.pacient.name} - {self.priority}"

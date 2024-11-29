@@ -1,5 +1,5 @@
 from django import forms
-from .models import Pacient, Doctor, Nurse, Queue
+from .models import Pacient, Doctor, Nurse, Queue, Reception, Consultation
 
 class PacientForm(forms.ModelForm):
     class Meta:
@@ -21,3 +21,32 @@ class QueueForm(forms.ModelForm):
     class Meta:
         model = Queue
         fields = ['pacient', 'nurse', 'priority', 'status']
+
+class TriagemForm(forms.ModelForm):
+    class Meta:
+        model = Reception
+        fields = [
+            'priority', 
+            'main_complaint', 
+            'disease_onset', 
+            'physical_condition', 
+            'medications', 
+            'allergies', 
+            'addictions', 
+            'blood_pressure',
+            'temperature',
+            'oxygen_saturation',
+            'heart_rate',
+            'pain_scale',
+            'glasgow_scale'
+        ]
+
+class ConsultaForm(forms.ModelForm):
+    class Meta:
+        model = Consultation
+        fields = [
+            'pacient',
+            'doctor',
+            'date',
+            'observations'
+        ]
