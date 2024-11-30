@@ -154,9 +154,9 @@
     <!-- Fila de Triagem, Atendimento e Pós-Atendimento -->
     <div class="queue-sections">
         <!-- Fila de Triagem -->
-        <div class="queue-section">
+        <div class="queue-section" id="triagemSection">
             <h2><i class="fas fa-procedures"></i> Fila de Triagem</h2>
-            <ul>
+            <ul id="triagemList">
                 {% for queue in fila_triagem %}
                     <li>
                         <strong>Senha:</strong> {{ queue.senha }} - 
@@ -169,9 +169,9 @@
         </div>
 
         <!-- Fila de Atendimento -->
-        <div class="queue-section">
+        <div class="queue-section" id="atendimentoSection">
             <h2><i class="fas fa-hospital"></i> Fila de Atendimento</h2>
-            <ul>
+            <ul id="atendimentoList">
                 {% for queue in fila_atendimento %}
                     <li>
                         <strong>Senha:</strong> {{ queue.senha }} - 
@@ -184,9 +184,9 @@
         </div>
 
         <!-- Fila de Pós-Atendimento -->
-        <div class="queue-section">
+        <div class="queue-section" id="posAtendimentoSection">
             <h2><i class="fas fa-bed"></i> Fila de Pós-Atendimento</h2>
-            <ul>
+            <ul id="posAtendimentoList">
                 {% for queue in fila_pos_atendimento %}
                     <li>
                         <strong>Senha:</strong> {{ queue.senha }} - 
@@ -198,5 +198,38 @@
             </ul>
         </div>
     </div>
+
+    <!-- WebSocket script -->
+    <script>
+        
+        const socket = new WebSocket('ws://' + window.location.host + '/ws/dashboard/');
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.type === 'queue_update') {
+                updateQueueList('triagemList', data.queues.triagem);
+                updateQueueList('atendimentoList', data.queues.atendimento);
+                updateQueueList('posAtendimentoList', data.queues.pos_atendimento);
+            }
+        };
+
+        socket.onclose = function(event) {
+            console.log('WebSocket connection closed');
+        };
+
+        function updateQueueList(elementId, queues) {
+            const listElement = document.getElementById(elementId);
+            listElement.innerHTML = '';
+
+            queues.forEach(queue => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<strong>Senha:</strong> ${queue.senha} - 
+                                      <strong>Paciente:</strong> ${queue.paciente} - 
+                                      <strong>Status:</strong> ${queue.status} - 
+                                      <strong>Data de Criação:</strong> ${queue.date_created}`;
+                listElement.appendChild(listItem);
+            });
+        }
+    </script>
 </body>
 </html>

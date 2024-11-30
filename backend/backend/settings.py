@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-+)x9s7igjt#1h)f*c-54vakkof7459k1m(7ix06^)%e=08*!rl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'api',
 
     #Django Rest Framework
-    'rest_framework'
+    'rest_framework',
+
+    #Channels
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -72,8 +75,17 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+ASGI_APPLICATION = 'backend.asgi.application'
 
+# Configuração do Redis para o Django Channels
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -139,3 +151,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',  # Adicione o URL do seu servidor de desenvolvimento
 ]
+
