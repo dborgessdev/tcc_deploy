@@ -26,9 +26,7 @@ def iniciar_consulta_view(request):
     senha = request.GET.get('senha')  # Pega a senha passada na URL
     queue = Queue.objects.get(senha=senha)
     queue.status = 'em_atendimento'  # Altera o status para "em_atendimento"
-
     queue.save()
-    
     # Redireciona para a página de consulta com o ID da fila
     return redirect('ficha_consulta', senha=queue.senha)
 
@@ -47,11 +45,10 @@ def formulario_consulta_view(request, senha):
             # Atualiza o status da fila para 'pre-atendimento'
             queue.status = 'pos_atendimento'
             queue.save()
-
             consultation.consulta_finalizada = True
             consultation.save()
 
-            return redirect('pre_atendimento')  # Redireciona para a tela de pré-atendimento após finalizar consulta
+            return redirect('/api/pre-consulta/')  
     else:
         form = ConsultaForm()
 

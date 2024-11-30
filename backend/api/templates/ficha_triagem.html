@@ -6,11 +6,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #8e8f91;
+            background-color: #f8f9fa;
             margin-top: 0;
             margin-bottom: 0;
-            margin-left: 15vh;
-            margin-right: 15vh;
+            margin-left: 10vw;
+            margin-right: 10vw;
         }
         .list-group-item {
             display: flex;
@@ -23,15 +23,64 @@
         .btn i {
             margin-right: 5px;
         }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .modal-content {
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Ficha de Triagem - Paciente: {{ paciente.name }}</h1>
 
-    <form method="POST">
+    <form id="triagemForm" method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Finalizar Triagem</button>
+        <div class="mb-3">
+            {{ form.as_p }}
+        </div>
+
+        <!-- Botão de Finalizar Triagem -->
+        <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#confirmModal">
+            Finalizar Triagem
+        </button>
     </form>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirmar Finalização</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza de que deseja finalizar a triagem deste paciente?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning" id="confirmFinishBtn">Finalizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Função para finalizar a triagem ao clicar no botão do modal
+        document.getElementById('confirmFinishBtn').addEventListener('click', function () {
+            // Submete o formulário
+            document.getElementById('triagemForm').submit();
+        });
+    </script>
 </body>
 </html>

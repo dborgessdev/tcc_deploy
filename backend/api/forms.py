@@ -27,6 +27,7 @@ class TriagemForm(forms.ModelForm):
         model = Reception
         fields = [
             'priority', 
+            'nurse',
             'main_complaint', 
             'disease_onset', 
             'physical_condition', 
